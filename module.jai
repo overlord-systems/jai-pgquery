@@ -24,7 +24,7 @@
     }
 
     // Either works, but msvcrt is deprecated
-    // crt :: #library,system "msvcrt";
+    // crt :: #library,system,no_dll "msvcrt";
     crt :: #library,system,no_dll "ucrt";
 
 } else #if OS == .MACOS {

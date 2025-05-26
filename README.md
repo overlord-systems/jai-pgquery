@@ -1,2 +1,3 @@
 # jai-pgquery
-Jai bindings for [libpg_query](https://github.com/pganalyze/libpg_query) which gives access to the PostgreSQL parser
+
+Jai bindings for [libpg_query](https://github.com/pganalyze/libpg_query) which gives access to the PostgreSQL parser, and returns the internal parse tree.

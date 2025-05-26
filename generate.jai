@@ -43,17 +43,6 @@ EOF
 
             array_add(*opts.libnames, "pg_query");
 
-        } else #if OS == .LINUX {
-            output_filename = "linux/linux.jai";
-
-            FOOTER :: #string EOF
-pg_query :: #library,system "pg_query";
-EOF;
-            opts.footer = FOOTER;
-            opts.generate_library_declarations = false;
-
-            array_add(*opts.libnames, "pg_query");
-
         } else #if OS == .MACOS {
 
             output_filename = "macos/macos.jai";
@@ -76,6 +65,17 @@ EOF;
             opts.footer = FOOTER;
 
             array_add(*opts.libnames, "pg_query");
+        } else #if OS == .LINUX {
+            output_filename = "linux/linux.jai";
+
+            FOOTER :: #string EOF
+pg_query :: #library,system "pg_query";
+EOF;
+            opts.footer = FOOTER;
+            opts.generate_library_declarations = false;
+
+            array_add(*opts.libnames, "pg_query");
+
         } else {
             assert(false, "the OS % is currently unsupported. You might be able to add support for it though!", OS);
         }
@@ -90,24 +90,27 @@ EOF;
     success := generate_bindings(opts, output_filename);
     if !success return false;
 
-    // Horrible hack because for some reason the symbols aren't found
-    defer {
-        if !success {
-            log("failed to replace invalid library name from generated bindings at '%'. You will have to manually replace '#foreign __UnknownLib' and '#elsewhere __UnknownLib' with '#foreign pg_query' and '#elsewhere pg_query'", output_filename, flags=.ERROR);
+    DO_HACK :: false;
+    if DO_HACK {
+        // Horrible hack because sometimes symbols aren't found
+        defer {
+            if !success {
+                log("failed to replace invalid library name from generated bindings at '%'. You will have to manually replace '#foreign __UnknownLib' and '#elsewhere __UnknownLib' with '#foreign pg_query' and '#elsewhere pg_query'", output_filename, flags=.ERROR);
+            }
         }
-    }
 
-    contents, success= := read_entire_file(output_filename);
-    if success {
-        defer free(contents);
+        contents, success= := read_entire_file(output_filename);
+        if success {
+            defer free(contents);
 
-        replace1 := replace(contents, "#foreign __UnknownLib", "#foreign pg_query");
-        defer free(replace1);
+            replace1 := replace(contents, "#foreign __UnknownLib", "#foreign pg_query");
+            defer free(replace1);
 
-        replace2 := replace(replace1, "#elsewhere __UnknownLib", "#elsewhere pg_query");
-        defer free(replace2);
+            replace2 := replace(replace1, "#elsewhere __UnknownLib", "#elsewhere pg_query");
+            defer free(replace2);
 
-        success = write_entire_file(output_filename, replace2);
+            success = write_entire_file(output_filename, replace2);
+        }
     }
 
     return success;

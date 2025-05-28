@@ -1,3 +1,5 @@
+#load "parse_tree.jai";
+
 #if OS == .WINDOWS {
     #load "windows/windows.jai";
 

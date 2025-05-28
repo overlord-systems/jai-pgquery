@@ -6,7 +6,7 @@ Currently only Windows bindings and binaries are available, but it should be eas
 
 ## Usage
 
-You can find a simple usage example in `tests/test.jai`.
+You can find a simple usage example in `tests/test.jai`. This test also involves using the (incomplete) typing for the parse tree, which is provided for the JSON parse tree.
 
 If you want to generate bindings simply run `jai generate.jai`.
 

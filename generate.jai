@@ -27,21 +27,21 @@ generate_bindings :: () -> bool {
 
             FOOTER :: #string EOF
 #if CPU == .X64 {
-    pg_query :: #library,no_dll "bin/x64/pg_query";
-} else #if CPU == .ARM64 {
-    #assert false "Windows ARM64 is not supported, but you might be able to compile for that!";
+    pg_query :: #library,no_dll "x64/pg_query";
+} else {
+    #assert false "libpg_query doesn't support this Windows CPU architecture, but you might be able to compile for that!";
 }
 EOF
-            opts.footer = FOOTER;
-            opts.generate_library_declarations = false;
 
             #if CPU == .X64 {
-                array_add(*opts.libpaths, "windows/bin/x64");
+                array_add(*opts.libpaths, "windows/x64");
             } else {
                 assert(false, "the CPU % is currently unsupported. You might be able to add support for it though!", CPU);
             }
 
+            opts.footer = FOOTER;
             array_add(*opts.libnames, "pg_query");
+            opts.generate_library_declarations = false;
 
         } else #if OS == .MACOS {
 
@@ -49,32 +49,43 @@ EOF
 
             FOOTER :: #string EOF
 #if CPU == .X64 {
-    pg_query :: #library "bin/x64/pg_query";
+    pg_query :: #library "x64/pg_query";
 } else #if CPU == .ARM64 {
-    pg_query :: #library "bin/arm64/pg_query";
+    pg_query :: #library "arm64/pg_query";
 }
 EOF;
             #if CPU == .X64 {
-                array_add(*opts.libpaths, "macos/bin/x64");
+                array_add(*opts.libpaths, "macos/x64");
             } else #if CPU == .ARM64 {
-                array_add(*opts.libpaths, "macos/bin/arm64");
+                array_add(*opts.libpaths, "macos/arm64");
             } else {
                 assert(false, "the CPU % is currently unsupported. You might be able to add support for it though!", CPU);
             }
 
             opts.footer = FOOTER;
+            array_add(*opts.libnames, "libpg_query");
+            opts.generate_library_declarations = false;
 
-            array_add(*opts.libnames, "pg_query");
         } else #if OS == .LINUX {
             output_filename = "linux/linux.jai";
 
             FOOTER :: #string EOF
-pg_query :: #library,system "pg_query";
+#if CPU == .X64 {
+    pg_query :: #library "x64/libpg_query";
+} else {
+    #assert false "libpg_query doesn't support this Linux CPU architecture, but you might be able to compile for that!";
+}
 EOF;
-            opts.footer = FOOTER;
-            opts.generate_library_declarations = false;
 
-            array_add(*opts.libnames, "pg_query");
+            #if CPU == .X64 {
+                array_add(*opts.libpaths, "linux/x64");
+            } else {
+                assert(false, "the CPU % is currently unsupported. You might be able to add support for it though!", CPU);
+            }
+
+            opts.footer = FOOTER;
+            array_add(*opts.libnames, "libpg_query");
+            opts.generate_library_declarations = false;
 
         } else {
             assert(false, "the OS % is currently unsupported. You might be able to add support for it though!", OS);

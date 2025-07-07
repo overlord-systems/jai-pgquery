@@ -142,7 +142,7 @@ pg_query_init :: () -> void #foreign pg_query;
 #scope_file
 
 #if CPU == .X64 {
-    pg_query :: #library,no_dll "bin/x64/pg_query";
-} else #if CPU == .ARM64 {
-    #assert false "Windows ARM64 is not supported, but you might be able to compile for that!";
+    pg_query :: #library,no_dll "x64/pg_query";
+} else {
+    #assert false "libpg_query doesn't support this Windows CPU architecture, but you might be able to compile for that!";
 }

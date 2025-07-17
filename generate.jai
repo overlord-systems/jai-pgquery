@@ -34,13 +34,13 @@ generate_bindings :: () -> bool {
 EOF
 
             #if CPU == .X64 {
-                array_add(*opts.libpaths, "windows/x64");
+                array_add(*opts.library_search_paths, "windows/x64");
             } else {
                 assert(false, "the CPU % is currently unsupported. You might be able to add support for it though!", CPU);
             }
 
             opts.footer = FOOTER;
-            array_add(*opts.libnames, "pg_query");
+            array_add(*opts.libraries, .{filename="pg_query"});
             opts.generate_library_declarations = false;
 
         } else #if OS == .MACOS {
@@ -55,9 +55,9 @@ EOF
 }
 EOF;
             #if CPU == .X64 {
-                array_add(*opts.libpaths, "macos/x64");
+                array_add(*opts.library_search_paths, "macos/x64");
             } else #if CPU == .ARM64 {
-                array_add(*opts.libpaths, "macos/arm64");
+                array_add(*opts.library_search_paths, "macos/arm64");
             } else {
                 assert(false, "the CPU % is currently unsupported. You might be able to add support for it though!", CPU);
             }
@@ -78,7 +78,7 @@ EOF;
 EOF;
 
             #if CPU == .X64 {
-                array_add(*opts.libpaths, "linux/x64");
+                array_add(*opts.library_search_paths, "linux/x64");
             } else {
                 assert(false, "the CPU % is currently unsupported. You might be able to add support for it though!", CPU);
             }

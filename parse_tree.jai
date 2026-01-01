@@ -116,9 +116,10 @@ Pg_Pt_Constraint :: struct {
             sval: string;
         }; @JsonName(String)
     };
-    fk_matchtype: string; // @TODO: Make enum
-    fk_upd_action: string; // @TODO: Make enum
-    fk_del_action: string; // @TODO: Make enum
+    // @TODO: Make enum
+    fk_matchtype: string;
+    fk_upd_action: string;
+    fk_del_action: string;
 }
 
 Pg_Pt_Raw_Expr_Type :: enum {

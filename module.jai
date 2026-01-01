@@ -19,7 +19,6 @@
     getpid :: () -> s32 #foreign oldnames;
     strdup :: (s: *u8) -> *u8 #foreign oldnames;
 
-    // We can also use msvcrt instead of ucrt, but msvcrt is deprecated now.
     crt :: #library,system,no_dll "ucrt";
     oldnames :: #library,system,no_dll,link_always "oldnames";
 
@@ -28,3 +27,4 @@
 } else #if OS == .LINUX {
     #load "linux/linux.jai";
 }
+
